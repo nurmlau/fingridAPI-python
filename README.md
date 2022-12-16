@@ -1,8 +1,8 @@
-#Power transmission grid of Fingrid
+# Power transmission grid of Fingrid
 
 Status of the Finnish electricity grid using Python and Fingrid API  
 
-##Install notes
+## Install notes
 
 pip install rich
 
