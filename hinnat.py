@@ -5,14 +5,14 @@ import datetime
 import secrets
 
 today = date.today()
-yesterday = today - datetime.timedelta(days=1)
+dayafter = today - datetime.timedelta(days=2)
 tomorrow = today + datetime.timedelta(days=1)
 
-yesterdaystamp = yesterday.strftime("%Y%m%d")
+dayafterstamp = dayafter.strftime("%Y%m%d")
 tomorrowstamp = tomorrow.strftime("%Y%m%d")
 mw = 999.59785523
 
-url = f"https://web-api.tp.entsoe.eu/api?securityToken={secrets.entsoeKey}&documentType=A44&in_Domain=10YFI-1--------U&out_Domain=10YFI-1--------U&periodStart={yesterdaystamp}2300&periodEnd={tomorrowstamp}2300"
+url = f"https://web-api.tp.entsoe.eu/api?securityToken={secrets.entsoeKey}&documentType=A44&in_Domain=10YFI-1--------U&out_Domain=10YFI-1--------U&periodStart={dayafterstamp}2300&periodEnd={tomorrowstamp}2300"
 
 
 result = requests.get(url, headers = {})
@@ -30,16 +30,28 @@ try:
             price = float(i["price.amount"]) / mw * 100
             temp.append(price)
 
-    priceData = []
-    for i in range(47):
-        if i >= 23:
-            priceData.append(temp[i])
+    
 
+    todayPrices = temp[23:47]
+
+    if len(temp) > 48:
+        tomorrowPrices = temp[47:]
+
+
+    print("Today prices:              Tomorrow prices:")
     for i in range(24):
-        print(tomorrow, hours[i], "{:.2f}".format(priceData[i]))
 
-except TypeError:
-    print("Data not available yet")
+        if len(tomorrowPrices) > 0:
+            tomorrowPrint = str(tomorrow) + " " + hours[i] + " " + "{:.2f}".format(tomorrowPrices[i])
+        
+        else:
+            tomorrowPrint = ""
+
+        print(today, hours[i], "{:.2f}".format(todayPrices[i]), "---", tomorrowPrint)
+
+except NameError:
+    pass
+    
 
     
 
