@@ -4,8 +4,8 @@ Status of the Finnish electricity grid using Python and Fingrid API
 
 ## Install notes
 
-pip install rich
-pip install xmltodict
+pip install rich  
+pip install xmltodict  
 
 ## APIs
 
