@@ -14,4 +14,4 @@ https://transparency.entsoe.eu/content/static_content/Static%20content/web%20api
 
 ## Example output
 
-![Alt text](example.png?raw=true "Example output")
+![Alt text](output.png?raw=true "Example output")
