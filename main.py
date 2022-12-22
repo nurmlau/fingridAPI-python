@@ -87,7 +87,7 @@ def getGridData():
         statusBranch.add(status)
         statusBranch.add("Sähköverkon taajuus: " + "[bright_cyan]" + str(frequency) + " [default]Hz")
         statusBranch.add("Sähköpula: " + shortage)
-        output.add("Hintatiedot:")
+        output.add("Hintatiedot: c/kWh (alv 10%)")
         console = Console()
         console.print(output)
     
@@ -105,7 +105,6 @@ def getPriceData():
 
     dayafterstamp = dayafter.strftime("%Y%m%d")
     tomorrowstamp = tomorrow.strftime("%Y%m%d")
-    mw = 999.59785523
 
     url = f"https://web-api.tp.entsoe.eu/api?securityToken={secrets.entsoeKey}&documentType=A44&in_Domain=10YFI-1--------U&out_Domain=10YFI-1--------U&periodStart={dayafterstamp}2300&periodEnd={tomorrowstamp}2300"
 
@@ -122,11 +121,10 @@ def getPriceData():
         for item in data["Publication_MarketDocument"]["TimeSeries"]:
 
             for i in item["Period"]["Point"]:
-                price = float(i["price.amount"]) / mw * 100
+                price = float(i["price.amount"]) / 10 * 1.1
                 temp.append(price)
 
         
-
         todayPrices = temp[23:47]
 
         if len(temp) > 48:
