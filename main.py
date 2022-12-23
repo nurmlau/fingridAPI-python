@@ -91,8 +91,8 @@ def getGridData():
         console = Console()
         console.print(output)
     
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
 def getPriceData():
 
@@ -108,7 +108,6 @@ def getPriceData():
 
     url = f"https://web-api.tp.entsoe.eu/api?securityToken={secrets.entsoeKey}&documentType=A44&in_Domain=10YFI-1--------U&out_Domain=10YFI-1--------U&periodStart={dayafterstamp}2300&periodEnd={tomorrowstamp}2300"
 
-
     result = requests.get(url, headers = {})
 
     data = xmltodict.parse(result.content)
@@ -123,13 +122,12 @@ def getPriceData():
             for i in item["Period"]["Point"]:
                 price = float(i["price.amount"]) / 10 * 1.1
                 temp.append(price)
-
-        
+   
         todayPrices = temp[23:47]
-
+        tomorrowPrices = ""
         if len(temp) > 48:
             tomorrowPrices = temp[47:]
-
+            pass
         print("Hinnat tänään              Hinnat huomenna")
         for i in range(24):
             
@@ -138,9 +136,10 @@ def getPriceData():
 
             if todayPrices[i] > 20: todayColor = "[orange1]"
             if todayPrices[i] > 40: todayColor = "[red]"
-
-            if tomorrowPrices[i] > 20: tomorrowColor = "[orange1]"
-            if tomorrowPrices[i] > 40: tomorrowColor = "[red]"
+            
+            if len(tomorrowPrices) > 0:
+                if tomorrowPrices[i] > 20: tomorrowColor = "[orange1]"
+                if tomorrowPrices[i] > 40: tomorrowColor = "[red]"
             
             if len(tomorrowPrices) > 0:
                 tomorrowPrint = str(tomorrow) + " [medium_violet_red]" + hours[i] + " " + tomorrowColor + "{:.2f}".format(tomorrowPrices[i])
@@ -155,8 +154,8 @@ def getPriceData():
 
             print(today, "[medium_violet_red]" + hours[i], todayColor + "{:.2f}".format(todayPrices[i]), indicator, tomorrowPrint)
 
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
 def main():
     
