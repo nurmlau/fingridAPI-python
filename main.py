@@ -142,8 +142,6 @@ def getPriceData():
             if len(tomorrowPrices) > 0:
                 if tomorrowPrices[i] > 20: tomorrowColor = "[orange1]"
                 if tomorrowPrices[i] > 40: tomorrowColor = "[red]"
-            
-            if len(tomorrowPrices) > 0:
                 tomorrowPrint = str(tomorrow) + " [medium_violet_red]" + hours[i] + " " + tomorrowColor + "{:.2f}".format(tomorrowPrices[i])
             
             else:
