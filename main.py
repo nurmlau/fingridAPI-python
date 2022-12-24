@@ -130,6 +130,7 @@ def getPriceData():
             topic = "Hinnat tänään              Hinnat huomenna"
 
         print(topic)
+
         for i in range(24):
             
             todayColor = "[green]"
@@ -151,7 +152,7 @@ def getPriceData():
             indicator = "---"
 
             if (hour) == i:
-                indicator = "[bold][red]<--"
+                indicator = "[bold][red]<<<"
 
             print(today, "[medium_violet_red]" + hours[i], todayColor + "{:.2f}".format(todayPrices[i]), indicator, tomorrowPrint)
 
