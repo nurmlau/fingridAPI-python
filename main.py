@@ -1,12 +1,12 @@
 import requests
 import secrets
+import xmltodict
+import datetime as d
 from rich.tree import Tree
 from rich import print
 from rich.console import Console
 from rich.table import Table
-import xmltodict
 from datetime import date
-import datetime as d
 from datetime import datetime
 
 def getGridData():
@@ -14,9 +14,7 @@ def getGridData():
     try:
 
         url = "https://api.fingrid.fi/v1/variable/event/json/336%2C177%2C201%2C188%2C191%2C202%2C181%2C209%2C192%2C193"
-
         result = requests.get(url, headers = {"x-api-key": secrets.key})
-
         data = result.json()
 
         windpower = production = consumption = status = industrial = water = nuclear = kauko = frequency = shortage = ""
@@ -76,10 +74,9 @@ def getGridData():
 
         suffiency = round(production - consumption, 2)
         
-        if suffiency < 0:
-            suffiency = "[red]" + str(suffiency)
-        else:
-            suffiency = "[green]" + str(suffiency)
+        if suffiency < 0: suffiency = "[red]" + str(suffiency)
+        else: suffiency = "[green]" + str(suffiency)
+
         consumptionBranch.add("Omavaraisuus: " + suffiency + " [default]MW")
 
         statusBranch = output.add("Sähköverkon tila")
@@ -106,9 +103,7 @@ def getPriceData():
     tomorrowstamp = tomorrow.strftime("%Y%m%d")
 
     url = f"https://web-api.tp.entsoe.eu/api?securityToken={secrets.entsoeKey}&documentType=A44&in_Domain=10YFI-1--------U&out_Domain=10YFI-1--------U&periodStart={dayafterstamp}2300&periodEnd={tomorrowstamp}2300"
-
     result = requests.get(url, headers = {})
-
     data = xmltodict.parse(result.content)
 
     hours = ["00-01", "01-02", "02-03", "03-04", "04-05", "05-06", "06-07", "07-08", "08-09", "09-10", "10-11", "11-12", "12-13", "13-14", "14-15", "15-16", "16-17", "17-18", "18-19", "19-20", "20-21", "21-22", "22-23", "23-24",]
@@ -125,6 +120,7 @@ def getPriceData():
         todayPrices = temp[23:47]
         tomorrowPrices = ""
         topic = "Hinnat tänään              Ei vielä huomisen hintatietoja"
+
         if len(temp) > 48:
             tomorrowPrices = temp[47:]
             topic = "Hinnat tänään              Hinnat huomenna"
@@ -138,19 +134,18 @@ def getPriceData():
 
             if todayPrices[i] > 20: todayColor = "[orange1]"
             if todayPrices[i] > 40: todayColor = "[red]"
+
+            tomorrowPrint = ""
             
             if len(tomorrowPrices) > 0:
                 if tomorrowPrices[i] > 20: tomorrowColor = "[orange1]"
                 if tomorrowPrices[i] > 40: tomorrowColor = "[red]"
                 tomorrowPrint = str(tomorrow) + " [medium_violet_red]" + hours[i] + " " + tomorrowColor + "{:.2f}".format(tomorrowPrices[i])
             
-            else:
-                tomorrowPrint = ""
-
             indicator = "---"
+            if todayPrices[i] < 10: indicator = " ---"
 
-            if (hour) == i:
-                indicator = "[bold][red]<<<"
+            if (hour) == i: indicator = "[bold][red]<<<"
 
             print(today, "[medium_violet_red]" + hours[i], todayColor + "{:.2f}".format(todayPrices[i]), indicator, tomorrowPrint)
 
