@@ -9,7 +9,6 @@ from datetime import date
 import datetime as d
 from datetime import datetime
 
-
 def getGridData():
 
     try:
@@ -125,10 +124,12 @@ def getPriceData():
    
         todayPrices = temp[23:47]
         tomorrowPrices = ""
+        topic = "Hinnat tänään              Ei vielä huomisen hintatietoja"
         if len(temp) > 48:
             tomorrowPrices = temp[47:]
-            pass
-        print("Hinnat tänään              Hinnat huomenna")
+            topic = "Hinnat tänään              Hinnat huomenna"
+
+        print(topic)
         for i in range(24):
             
             todayColor = "[green]"
